@@ -1,0 +1,28 @@
+inherit_from: .rubocop_todo.yml
+
+Encoding:
+  Enabled: false
+
+Metrics/ClassLength:
+  CountComments: false
+
+Metrics/MethodLength:
+  CountComments: false
+
+AllCops:
+  Exclude:
+    - contentful.gemspec
+    - spec/**/*
+    - examples/**/*
+    - Guardfile
+    - Gemfile
+    - Rakefile
+
+Metrics/ClassLength:
+  Max: 250
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: 'semantic'

@@ -1,0 +1,13 @@
+language: ruby
+rvm:
+  - 2.4.0
+  - 2.3.1
+  - 2.2.1
+notifications:
+  slack:
+    secure: Zr3mKCiTb0vaTD4MPtTG8BbyYyErFuoxioM25QyrqePKVkDFeZC1MtGmg5klQQrJiWTKZPa/zB8NAHYkoUxg9I+z15JK0hYfz9KRubEpCrXCaqTC9Vzq88kJ3LN8YsTyBF66izaBH2KLsOfaJRxwplFzZqgpg4GG2DUBPtrGtes=
+before_install: gem install bundler -v 1.10.6
+script: bundle exec rake rspec_rubocop
+matrix:
+  allow_failures:
+    - rvm: jruby
