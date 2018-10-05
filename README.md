@@ -184,6 +184,20 @@ Best Friend:
 	Lives #: 1337
 ```
 
+### Schema Introspection and Validation
+
+By default this library will fetch and cache a copy of the GraphQL Schema for any API you create a client for.
+
+This schema is used for query validation before running queries against the APIs. In case a query is invalid for the given schema, an exception will be raised.
+
+To disable schema caching completely, when you initialize your client, send `validate_query: false`.
+
+Queries executed using the `#execute` method on the client will be validated before executing the request if the option is set to `true` (which it is by default).
+
+To avoid validating a query, you can use `#execute!` instead.
+
+To validate the query outside of the scope of an HTTP request, you can use `MY_CLIENT.schema.valid?(query)`.
+
 ### Embedding the DSL in your classes
 
 If you want to avoid the need for prepending all GQLi DSL's calls with `GQLi::DSL.`, then you can `extend` and/or `include` the module within your own classes.
@@ -238,3 +252,19 @@ end
 
 response = ContentfulClient.new.cats(5)
 ```
+
+## Get involved
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?maxAge=31557600)](http://makeapullrequest.com)
+
+We appreciate any help on our repositories.
+
+## License
+
+This repository is published under the [MIT](LICENSE.txt) license.
+
+## Code of Conduct
+
+We want to provide a safe, inclusive, welcoming, and harassment-free space and experience for all participants, regardless of gender identity and expression, sexual orientation, disability, physical appearance, socioeconomic status, body size, ethnicity, nationality, level of experience, age, religion (or lack thereof), or other identity markers.
+
+[Read our full Code of Conduct](https://github.com/contentful-developer-relations/community-code-of-conduct).

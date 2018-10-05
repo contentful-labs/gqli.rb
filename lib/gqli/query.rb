@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 require_relative './base'
 
 module GQLi
+  # Query node
   class Query < Base
     def to_gql
-      result =<<-GQL
-query #{__name ? " " + __name : ""}{
-#{__nodes.map(&:to_gql).join("\n")}
-}
-GQL
+      result = <<~GQL
+        query #{__name ? ' ' + __name : ''}{
+        #{__nodes.map(&:to_gql).join("\n")}
+        }
+      GQL
 
       result.lstrip
     end

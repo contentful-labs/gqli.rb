@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require_relative './query'
 require_relative './fragment'
 
 module GQLi
+  # GraphQL-like DSL methods
   module DSL
     def self.query(name = nil, &block)
       Query.new(name, &block)

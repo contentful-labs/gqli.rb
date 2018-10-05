@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require_relative './base'
 
 module GQLi
+  # Node wrapper
   class Node < Base
     attr_reader :__params
 
@@ -10,12 +13,12 @@ module GQLi
     end
 
     def to_gql
-      result = "  " * __depth + __name
-      result += "(" + __params_to_s(__params) + ")" unless __params.empty?
-      if !__nodes.empty?
+      result = '  ' * __depth + __name
+      result += '(' + __params_to_s(__params, true) + ')' unless __params.empty?
+      unless __nodes.empty?
         result += " {\n"
-        result += "#{__nodes.map(&:to_gql).join("\n")}"
-        result += "\n#{"  " * __depth}}"
+        result += __nodes.map(&:to_gql).join("\n")
+        result += "\n#{'  ' * __depth}}"
       end
 
       result
@@ -23,14 +26,19 @@ module GQLi
 
     private
 
-    def __params_to_s(params)
+    def __params_to_s(params, initial = false)
       case params
       when ::Hash
-        params.map do |k, v|
-          "#{k.to_s}: #{__params_to_s(v)}"
-        end.join(", ")
+        result = params.map do |k, v|
+          "#{k}: #{__params_to_s(v)}"
+        end.join(', ')
+
+        return result if initial
+        "{#{result}}"
       when ::Array
-        params.map { |p| __params_to_s(p) }.join(", ")
+        "[#{params.map { |p| __params_to_s(p) }.join(', ')}]"
+      when ::String
+        "\"#{params}\""
       else
         params.to_s
       end

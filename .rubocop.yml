@@ -10,13 +10,16 @@ Metrics/MethodLength:
   CountComments: false
 
 AllCops:
+  TargetRubyVersion: 2.3
+
   Exclude:
-    - contentful.gemspec
+    - gqli.gemspec
     - spec/**/*
     - examples/**/*
     - Guardfile
     - Gemfile
     - Rakefile
+    - usage*.rb
 
 Metrics/ClassLength:
   Max: 250

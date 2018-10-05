@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module GQLi
+  # Base class for GraphQL type wrappers
   class Base
     attr_reader :__name, :__depth, :__nodes
 

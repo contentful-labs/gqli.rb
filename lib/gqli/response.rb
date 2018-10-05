@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require 'hashie/mash'
 
 module GQLi
+  # Response object wrapper
   class Response
     attr_reader :data, :query
 

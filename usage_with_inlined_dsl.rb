@@ -33,7 +33,7 @@ class ContentfulClient
   def cats
     CONTENTFUL_GQL.execute(
       query {
-        catCollection(limit: 10) {
+        catCollection(limit: 10, locale: 'tlh') {
           items {
             ___ CatImportantFields
             image {
@@ -57,6 +57,7 @@ response.data.catCollection.items.each do |c|
   puts "Name:    #{c.name}"
   puts "Likes:   #{c.likes.join(", ")}"
   puts "Lives #: #{c.lives}"
+  puts "Image:   #{c.image.url}" if c.image?
   c.bestFriend.tap do |bf|
     next if bf.nil?
     puts "Best Friend:"
@@ -64,4 +65,5 @@ response.data.catCollection.items.each do |c|
     puts "\tLikes:   #{bf.likes.join(", ")}"
     puts "\tLives #: #{bf.lives}"
   end
+  puts
 end
