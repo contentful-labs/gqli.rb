@@ -4,7 +4,9 @@ SimpleCov.start
 require 'rspec'
 require 'vcr'
 
-Dir[File.dirname(__FILE__) + '/support/**/*.rb'].each { |f| require f }
+Dir[File.join('..', File.dirname(__FILE__), 'lib', '**', '*.rb')].each { |f| require f }
+
+require 'gqli'
 
 RSpec.configure do |config|
   config.filter_run :focus => true

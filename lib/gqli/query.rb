@@ -7,7 +7,7 @@ module GQLi
   class Query < Base
     def to_gql
       result = <<~GQL
-        query #{__name ? ' ' + __name : ''}{
+        query #{__name ? __name + ' ' : ''}{
         #{__nodes.map(&:to_gql).join("\n")}
         }
       GQL
