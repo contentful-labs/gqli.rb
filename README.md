@@ -253,6 +253,12 @@ end
 response = ContentfulClient.new.cats(5)
 ```
 
+## Yet to be implemented
+
+* Mutation queries
+* Subscription queries
+* Detailed validation errors
+
 ## Get involved
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?maxAge=31557600)](http://makeapullrequest.com)

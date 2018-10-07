@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://graphql.contentful.com/content/v1/spaces/cfexampleapi
+    body:
+      encoding: UTF-8
+      string: '{"query":"query {\n  catCollection {\n    items {\n      name\n    }\n  }\n}\n"}'
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - gqli.rb/0.1.0; http.rb/2.2.2
+      Authorization:
+      - Bearer b4c0n73n7fu1
+      Connection:
+      - close
+      Content-Type:
+      - application/json; charset=UTF-8
+      Host:
+      - graphql.contentful.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Headers:
+      - Accept,Accept-Language,Authorization,Cache-Control,Content-Length,Content-Range,Content-Type,DNT,Destination,Expires,If-Match,If-Modified-Since,If-None-Match,Keep-Alive,Last-Modified,Origin,Pragma,Range,User-Agent,X-Http-Method-Override,X-Mx-ReqToken,X-Requested-With,X-Contentful-Version,X-Contentful-Content-Type,X-Contentful-Organization,X-Contentful-Skip-Transformation,X-Contentful-User-Agent,X-Contentful-Enable-Alpha-Feature
+      Access-Control-Allow-Methods:
+      - GET,POST,HEAD,OPTIONS
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Etag
+      Access-Control-Max-Age:
+      - '86400'
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Contentful-Api:
+      - cda
+      Date:
+      - Sun, 07 Oct 2018 11:49:15 GMT
+      Server:
+      - Contentful
+      Strict-Transport-Security:
+      - max-age=15768000
+      X-Content-Type-Options:
+      - nosniff
+      X-Contentful-Request-Id:
+      - 5bbf51e1dabca84c964974f3d459526c
+      Content-Length:
+      - '99'
+      Connection:
+      - Close
+    body:
+      encoding: UTF-8
+      string: '{"data":{"catCollection":{"items":[{"name":"Happy Cat"},{"name":"Nyan
+        Cat"},{"name":"Garfield"}]}}}'
+    http_version: 
+  recorded_at: Sun, 07 Oct 2018 11:49:15 GMT
+recorded_with: VCR 4.0.0

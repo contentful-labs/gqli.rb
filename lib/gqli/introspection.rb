@@ -7,6 +7,7 @@ module GQLi
   class Introspection
     extend DSL
 
+    # Specific type kind introspection fragment
     TypeRef = fragment('TypeRef', '__Type') {
       kind
       name
@@ -24,6 +25,7 @@ module GQLi
       }
     }
 
+    # Input value introspection fragment
     InputValue = fragment('InputValue', '__InputValue') {
       name
       description
@@ -31,6 +33,7 @@ module GQLi
       defaultValue
     }
 
+    # Type introspection fragment
     FullType = fragment('FullType', '__Type') {
       kind
       name
@@ -54,6 +57,7 @@ module GQLi
       possibleTypes { ___ TypeRef }
     }
 
+    # Query for fetching the complete schema
     IntrospectionQuery = query {
       __schema {
         queryType { name }
@@ -81,6 +85,7 @@ module GQLi
       @types = schema.types
     end
 
+    # Returns wether the query is valid or not
     def valid?(query)
       return false unless query.is_a?(Query)
 
@@ -104,12 +109,12 @@ module GQLi
 
       return false unless valid_params?(node_type, node)
 
-      node.__nodes.all? do |n|
-        field_type = type_for(node_type)
-        return false if field_type.nil?
+      resolved_node_type = type_for(node_type)
+      return false if resolved_node_type.nil?
 
-        valid_node?(field_type, n)
-      end
+      return false unless valid_nesting_node?(resolved_node_type, node)
+
+      node.__nodes.all? { |n| valid_node?(resolved_node_type, n) }
     end
 
     def valid_match_node?(parent_type, node)
@@ -131,20 +136,36 @@ module GQLi
       true
     end
 
+    def valid_nesting_node?(node_type, node)
+      return false unless valid_object_node?(node_type, node)
+      return false unless valid_array_node?(node_type, node)
+      true
+    end
+
+    def valid_object_node?(node_type, node)
+      return false if %w[OBJECT INTERFACE].include?(node_type.kind) && node.__nodes.empty?
+      true
+    end
+
+    def valid_array_node?(node_type, node)
+      return false if %w[OBJECT INTERFACE].include?(node_type.kind) && node.__nodes.empty?
+      true
+    end
+
     def valid_value_for_type?(arg_type, value)
       case value
       when ::String
-        false unless arg_type.name == 'String' || arg_type.name == 'ID'
+        return false unless arg_type.name == 'String' || arg_type.name == 'ID'
       when ::Integer
-        false unless arg_type.name == 'Int'
+        return false unless arg_type.name == 'Int'
       when ::Float
-        false unless arg_type.name == 'Float'
+        return false unless arg_type.name == 'Float'
       when ::Hash
         return valid_hash_value?(arg_type, value)
       when true, false
-        false unless arg_type.name == 'Boolean'
+        return false unless arg_type.name == 'Boolean'
       else
-        false
+        return false
       end
 
       true
@@ -173,7 +194,7 @@ module GQLi
                non_null_type(field_type.type.ofType)
              when 'LIST'
                field_type.type.ofType
-             when 'OBJECT', 'INTERFACE'
+             when 'OBJECT', 'INTERFACE', 'INPUT_OBJECT'
                field_type.type
              when 'SCALAR'
                field_type.type

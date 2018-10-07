@@ -12,10 +12,12 @@ module GQLi
       instance_eval(&block) unless block.nil?
     end
 
+    # Inlines fragment nodes into current node
     def ___(fragment)
       @__nodes += __clone_nodes(fragment)
     end
 
+    # Adds type match node
     def __on(type_name, &block)
       require_relative './node'
       @__nodes << Node.new("... on #{type_name}", [], __depth + 1, &block)

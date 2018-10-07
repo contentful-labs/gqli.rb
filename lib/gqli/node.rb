@@ -12,6 +12,7 @@ module GQLi
       @__params = params
     end
 
+    # Serializes to a GraphQL string
     def to_gql
       result = '  ' * __depth + __name
       result += '(' + __params_to_s(__params, true) + ')' unless __params.empty?

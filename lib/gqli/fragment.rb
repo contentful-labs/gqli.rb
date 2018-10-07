@@ -13,6 +13,7 @@ module GQLi
       @__on_type = on
     end
 
+    # Serializes to a GraphQL string
     def to_gql
       <<~GQL
         fragment #{__name} on #{__on_type} {
