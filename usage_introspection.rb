@@ -58,6 +58,6 @@ end
 
 puts "Trying to execute invalid query"
 
-CONTENTFUL_GQL.execute(GQLi::DSL.query {
+CONTENTFUL_GQL.execute!(GQLi::DSL.query {
   invalidNode
 })

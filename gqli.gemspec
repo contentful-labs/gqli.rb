@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
   gem.authors       = ['Contentful GmbH (David Litvak Bruno)']
   gem.email         = 'rubygems@contentful.com'
-  gem.homepage      = 'https://github.com/contentful/gqli.rb'
+  gem.homepage      = 'https://github.com/contentful-labs/gqli.rb'
 
   gem.files         = Dir['{**/}{.*,*}'].select { |path| File.file?(path) && !path.start_with?('pkg') }
   gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }

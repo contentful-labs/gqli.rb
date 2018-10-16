@@ -2,6 +2,15 @@
 
 GQLi is a DSL (Domain Specific Language) to consume GraphQL APIs.
 
+> **DISCLAIMER:**
+>
+> This gem is in stable state and will be updated with more features.
+> You can start using it for your respective projects, although there is no support available from Contentful.
+>
+> This gem is not covered under the Contentful SLAs.
+>
+> Users are free to create Github issues and collaborate.
+
 ## Installation
 
 Install it via the command line:
@@ -20,7 +29,7 @@ gem 'gqli'
 
 ### Creating a GraphQL Client
 
-For the examples throught this README, we'll be using the Contentful and Github GraphQL APIs.
+For the examples throughout this README, we'll be using the Contentful and Github GraphQL APIs.
 Therefore, here's the initialization code required for both of them:
 
 ```ruby
@@ -44,7 +53,7 @@ GITHUB_GQL = GQLi::Client.new(
 
 ### Creating a Query
 
-Queries are the way we have to request data from a GraphQL API.
+Queries are the way to request data from a GraphQL API.
 This gem provides a simple DSL to create your own queries.
 
 The query operator is `GQLi::DSL.query`.
@@ -74,8 +83,7 @@ WatchersQuery = GQLi::DSL.query {
 
 ### Divide and conquer - using Fragments
 
-Some times, we want to reuse parts of queries.
-For that, we can split chunks of our queries into Fragments.
+In order to reuse parts of queries, we can split chunks of our queries into Fragments.
 
 The fragment operator is `GQLi::DSL.fragment`.
 
@@ -150,7 +158,7 @@ response.data.catCollection.items.each do |c|
 end
 ```
 
-This will output:
+The output is:
 
 ```
 Query sent:
