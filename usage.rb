@@ -88,7 +88,7 @@ puts response.query.to_gql
 puts
 puts "Response received"
 response.data.catCollection.items.each do |c|
-  puts "Name:    #{c.nam}e"
+  puts "Name:    #{c.name}"
   puts "Likes:   #{c.likes.join(", ")}"
   puts "Lives #: #{c.lives}"
   c.bestFriend.tap do |bf|
