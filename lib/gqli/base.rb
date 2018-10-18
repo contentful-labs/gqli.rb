@@ -52,8 +52,7 @@ module GQLi
     end
 
     def method_missing(name, *args, &block)
-      require_relative './node'
-      @__nodes << Node.new(name.to_s, __params_from_args(args), __depth + 1, &block)
+      __node(name.to_s, __params_from_args(args), &block)
     end
   end
 end
