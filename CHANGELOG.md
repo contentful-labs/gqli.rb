@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+
+## v0.2.0
 ### Added
 * Added `__node` to be able to create nodes in case there's a name collision with a reserved keyword or a built-in method.
 
