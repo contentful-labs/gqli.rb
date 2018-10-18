@@ -201,5 +201,49 @@ describe GQLi::DSL do
         }
       GRAPHQL
     end
+
+    it 'can use __node to define nodes that would collide otherwise' do
+      query = subject.query {
+        catCollection {
+          items {
+            sys {
+              __node('id')
+            }
+          }
+        }
+      }
+
+      expect(query.to_gql).to eq <<~GRAPHQL
+        query {
+          catCollection {
+            items {
+              sys {
+                id
+              }
+            }
+          }
+        }
+      GRAPHQL
+    end
+
+    it '__node can receive arguments and children nodes' do
+      query = subject.query {
+        __node('catCollection', limit: 1) {
+          items {
+            name
+          }
+        }
+      }
+
+      expect(query.to_gql).to eq <<~GRAPHQL
+        query {
+          catCollection(limit: 1) {
+            items {
+              name
+            }
+          }
+        }
+      GRAPHQL
+    end
   end
 end
