@@ -261,6 +261,36 @@ end
 response = ContentfulClient.new.cats(5)
 ```
 
+### Dealing with name collisions
+
+By defining queries via a DSL, you may sometimes find that the fields you query for are also the names of built-in methods or reserved keywords of the language.
+
+To avoid collisions you can use the `__node` helper, for example:
+
+```ruby
+query = GQLi::DSL.query {
+  catCollection {
+    items {
+      sys {
+        __node('id')
+      }
+    }
+  }
+}
+```
+
+The helper method `__node`, can also receive arguments and have children nodes as expected from any other node declaration, for example:
+
+```
+query = GQLi::DSL.query {
+  __node('catCollection', limit: 5) {
+    items {
+      name
+    }
+  }
+}
+```
+
 ## Yet to be implemented
 
 * Mutation queries

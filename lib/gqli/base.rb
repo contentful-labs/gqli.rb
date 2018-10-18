@@ -20,7 +20,13 @@ module GQLi
     # Adds type match node
     def __on(type_name, &block)
       require_relative './node'
-      @__nodes << Node.new("... on #{type_name}", [], __depth + 1, &block)
+      @__nodes << Node.new("... on #{type_name}", {}, __depth + 1, &block)
+    end
+
+    # Adds children node into current node
+    def __node(name, params = {}, &block)
+      require_relative './node'
+      @__nodes << Node.new(name, params, __depth + 1, &block)
     end
 
     protected
