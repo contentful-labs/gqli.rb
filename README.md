@@ -281,7 +281,7 @@ query = GQLi::DSL.query {
 
 The helper method `__node`, can also receive arguments and have children nodes as expected from any other node declaration, for example:
 
-```
+```ruby
 query = GQLi::DSL.query {
   __node('catCollection', limit: 5) {
     items {
