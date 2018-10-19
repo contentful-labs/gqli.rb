@@ -9,6 +9,8 @@
 # Offense count: 3
 Metrics/AbcSize:
   Max: 20
+  Exclude:
+    - 'lib/gqli/validation.rb'
 
 # Blocks can be arbitrarily long due to GraphQL DSL syntax.
 Metrics/BlockLength:
@@ -17,6 +19,8 @@ Metrics/BlockLength:
 # Offense count: 1
 Metrics/CyclomaticComplexity:
   Max: 11
+  Exclude:
+    - 'lib/gqli/validation.rb'
 
 # Offense count: 8
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
@@ -28,10 +32,14 @@ Metrics/LineLength:
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
   Max: 15
+  Exclude:
+    - 'lib/gqli/validation.rb'
 
 # Offense count: 1
 Metrics/PerceivedComplexity:
   Max: 8
+  Exclude:
+    - 'lib/gqli/validation.rb'
 
 # Block delimiters are `{...}` to match GraphQL syntax more closely.
 Style/BlockDelimiters:

@@ -295,7 +295,6 @@ query = GQLi::DSL.query {
 
 * Mutation queries
 * Subscription queries
-* Detailed validation errors
 
 ## Get involved
 

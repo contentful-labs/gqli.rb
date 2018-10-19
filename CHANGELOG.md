@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+### Added
+* Refactored validations to their own `Validation` class, which now provide better error messages upon validation failure.
 
 ## v0.2.0
 ### Added
