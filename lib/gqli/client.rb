@@ -23,7 +23,10 @@ module GQLi
     # Executes a query
     # If validations are enabled, will perform validation check before request.
     def execute(query)
-      fail 'Validation Error: query is invalid - HTTP Request not sent' unless valid?(query)
+      if validate_query
+        validation = schema.validate(query)
+        fail validation_error_message(validation) unless validation.valid?
+      end
 
       execute!(query)
     end
@@ -44,10 +47,19 @@ module GQLi
     def valid?(query)
       return true unless validate_query
 
-      @schema.valid?(query)
+      schema.valid?(query)
     end
 
     protected
+
+    def validation_error_message(validation)
+      <<~ERROR
+        Validation Error: query is invalid - HTTP Request not sent.
+
+        Errors:
+          - #{validation.errors.join("\n  - ")}
+      ERROR
+    end
 
     def request_headers
       {

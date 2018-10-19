@@ -54,6 +54,10 @@ describe GQLi::Introspection do
       }
 
       expect(subject.valid?(query)).to be_truthy
+
+      validation = subject.validate(query)
+      expect(validation.valid?).to be_truthy
+      expect(validation.errors).to be_empty
     end
 
     it 'wrong node returns false' do
@@ -62,6 +66,11 @@ describe GQLi::Introspection do
       }
 
       expect(subject.valid?(query)).to be_falsey
+
+      validation = subject.validate(query)
+      expect(validation.valid?).to be_falsey
+      expect(validation.errors).not_to be_empty
+      expect(validation.errors.map(&:to_s)).to include("Node type not found for 'foo'")
     end
 
     it 'object node that doesnt have proper values returns false' do
@@ -70,6 +79,11 @@ describe GQLi::Introspection do
       }
 
       expect(subject.valid?(query)).to be_falsey
+
+      validation = subject.validate(query)
+      expect(validation.valid?).to be_falsey
+      expect(validation.errors).not_to be_empty
+      expect(validation.errors.map(&:to_s)).to include("Invalid object for node 'catCollection'")
     end
 
     it 'object list node that doesnt have proper values returns false' do
@@ -80,6 +94,11 @@ describe GQLi::Introspection do
       }
 
       expect(subject.valid?(query)).to be_falsey
+
+      validation = subject.validate(query)
+      expect(validation.valid?).to be_falsey
+      expect(validation.errors).not_to be_empty
+      expect(validation.errors.map(&:to_s)).to include("Invalid object for node 'items'")
     end
 
     it 'type matching on invalid type returns false' do
@@ -96,6 +115,11 @@ describe GQLi::Introspection do
       }
 
       expect(subject.valid?(query)).to be_falsey
+
+      validation = subject.validate(query)
+      expect(validation.valid?).to be_falsey
+      expect(validation.errors).not_to be_empty
+      expect(validation.errors.map(&:to_s)).to include("Match type 'InvalidType' invalid")
     end
 
     it 'invalid arguments return false' do
@@ -108,6 +132,11 @@ describe GQLi::Introspection do
       }
 
       expect(subject.valid?(query)).to be_falsey
+
+      validation = subject.validate(query)
+      expect(validation.valid?).to be_falsey
+      expect(validation.errors).not_to be_empty
+      expect(validation.errors.map(&:to_s)).to include("Invalid argument 'invalidParam'")
     end
 
     it 'invalid argument type returns false' do
@@ -120,6 +149,11 @@ describe GQLi::Introspection do
       }
 
       expect(subject.valid?(query)).to be_falsey
+
+      validation = subject.validate(query)
+      expect(validation.valid?).to be_falsey
+      expect(validation.errors).not_to be_empty
+      expect(validation.errors.map(&:to_s)).to include("Value is 'String, Enum or ID', but should be 'Int' for 'limit'")
     end
   end
 end

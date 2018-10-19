@@ -49,7 +49,12 @@ describe GQLi::Client do
           dsl.query {
             foobar
           }
-        )}.to raise_exception 'Validation Error: query is invalid - HTTP Request not sent'
+        )}.to raise_exception <<~ERROR
+          Validation Error: query is invalid - HTTP Request not sent.
+
+          Errors:
+            - Node type not found for 'foobar'
+        ERROR
       }
     end
 
