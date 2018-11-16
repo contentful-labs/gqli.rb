@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+### Added
+* Add directive support.
 
 ## v0.3.0
 ### Added

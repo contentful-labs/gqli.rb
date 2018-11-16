@@ -155,5 +155,98 @@ describe GQLi::Introspection do
       expect(validation.errors).not_to be_empty
       expect(validation.errors.map(&:to_s)).to include("Value is 'String, Enum or ID', but should be 'Int' for 'limit'")
     end
+
+    describe 'directives' do
+      it 'can create a query with a directive and validations should not fail' do
+        query = dsl.query {
+          catCollection {
+            items {
+              name(:@include => { if: true })
+            }
+          }
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_truthy
+      end
+
+      it 'unknown directives will fail' do
+        query = dsl.query {
+          catCollection(:@unknownDirective => nil)
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Directive unknown '@unknownDirective'")
+      end
+
+      it 'known directive will fail if no arguments are passed' do
+        query = dsl.query {
+          catCollection(:@include => nil)
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Missing arguments for directive '@include'")
+      end
+
+      it 'known directive will fail if arguments are empty' do
+        query = dsl.query {
+          catCollection(:@include => {})
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Missing arguments for directive '@include'")
+      end
+
+      it 'known directive will fail if arguments is not if' do
+        query = dsl.query {
+          catCollection {
+            items {
+              name(:@include => { else: true })
+            }
+          }
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Invalid argument 'else' for directive '@include'")
+      end
+
+      it 'known directive will fail when if value is not boolean' do
+        query = dsl.query {
+          catCollection {
+            items {
+              name(:@include => { if: 123 })
+            }
+          }
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Invalid value for 'if`, must be a boolean")
+      end
+
+      it 'known directive will fail when multiple arguments are passed' do
+        query = dsl.query {
+          catCollection {
+            items {
+              name(:@include => { if: true, else: false })
+            }
+          }
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Invalid argument 'else' for directive '@include'")
+      end
+    end
   end
 end
