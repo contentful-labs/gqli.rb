@@ -44,7 +44,7 @@ module GQLi
     end
 
     def validate_node(parent_type, node)
-      return if parent_type.kind == 'SCALAR'
+      validate_directives(node)
 
       return valid_match_node?(parent_type, node) if node.__name.start_with?('... on')
 
@@ -66,8 +66,26 @@ module GQLi
       fail "Match type '#{node.__name.gsub('... on ', '')}' invalid"
     end
 
+    def validate_directives(node)
+      return unless node.__params.size == 1
+      node.__params.first.tap do |k, v|
+        break unless k.to_s.start_with?('@')
+
+        fail "Directive unknown '#{k}'" unless %i[@include @skip].include?(k)
+        fail "Missing arguments for directive '#{k}'" if v.nil? || !v.is_a?(::Hash) || v.empty?
+        v.each do |arg, value|
+          begin
+            fail "Invalid argument '#{arg}' for directive '#{k}'" if arg.to_s != 'if'
+            fail "Invalid value for 'if`, must be a boolean" if value != !!value
+          rescue StandardError => e
+            errors << e
+          end
+        end
+      end
+    end
+
     def validate_params(node_type, node)
-      node.__params.each do |param, value|
+      node.__params.reject { |p, _| p.to_s.start_with?('@') }.each do |param, value|
         begin
           arg = node_type.fetch('args', []).find { |a| a.name == param.to_s }
           fail "Invalid argument '#{param}'" if arg.nil?

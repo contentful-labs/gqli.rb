@@ -116,6 +116,20 @@ describe GQLi::DSL do
       GRAPHQL
     end
 
+    it 'nodes can have directives' do
+      query = subject.query {
+        someNode(:@include => {if: true})
+        otherNode(:@skip => {if: false})
+      }
+
+      expect(query.to_gql).to eq <<~GRAPHQL
+        query {
+          someNode @include(if: true)
+          otherNode @skip(if: false)
+        }
+      GRAPHQL
+    end
+
     it 'nodes can have arbitrarily nested nodes' do
       query = subject.query {
         aNode {

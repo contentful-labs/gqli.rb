@@ -29,3 +29,6 @@ Style/MutableConstant:
 
 Style/SignalException:
   EnforcedStyle: 'semantic'
+
+Style/DoubleNegation:
+  Enabled: false

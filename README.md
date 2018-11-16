@@ -291,6 +291,34 @@ query = GQLi::DSL.query {
 }
 ```
 
+### Directives
+
+In GraphQL, nodes can be selectively included or removed by the usage of directives, there are 2 directives available for the querying specification to do this: `@include` and `@skip`.
+
+```ruby
+query = GQLi::DSL.query {
+  someNode(:@include => {if: object.includes_some_node?})
+}
+```
+
+This will get transformed to:
+
+```graphql
+query {
+  someNode @include(if: true) # or false
+}
+```
+
+This behaviour is equivalent to using native Ruby to include/exclude a field from the query:
+
+```ruby
+query = GQLi::DSL.query {
+  someNode if object.includes_some_node?
+}
+```
+
+The difference is that by using the native implementation, in case of the condition not being met, the node will be completely not included in the outgoing query.
+
 ## Yet to be implemented
 
 * Mutation queries
