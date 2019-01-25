@@ -153,7 +153,59 @@ describe GQLi::Introspection do
       validation = subject.validate(query)
       expect(validation.valid?).to be_falsey
       expect(validation.errors).not_to be_empty
-      expect(validation.errors.map(&:to_s)).to include("Value is 'String, Enum or ID', but should be 'Int' for 'limit'")
+      expect(validation.errors.map(&:to_s)).to include("Value is 'String or ID', but should be 'Int' for 'limit'")
+    end
+
+    describe 'enum values' do
+      it 'can create a query with an enum as a filter and validations should not fail' do
+        query = dsl.query {
+          catCollection(order: __enum('lives_ASC')) {
+            items {
+              name
+            }
+          }
+        }
+
+        expect(subject.valid?(query)).to be_truthy
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_truthy
+        expect(validation.errors).to be_empty
+      end
+
+      it 'fails when enum value is not provided properly' do
+        query = dsl.query {
+          catCollection(order: 'lives_ASC') {
+            items {
+              name
+            }
+          }
+        }
+
+        expect(subject.valid?(query)).to be_falsey
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Value is 'String or ID', but should be 'Enum' for 'order'. Wrap the value with `__enum`.")
+      end
+
+      it 'fails when enum value is not provided properly and is not a string' do
+        query = dsl.query {
+          catCollection(order: 1) {
+            items {
+              name
+            }
+          }
+        }
+
+        expect(subject.valid?(query)).to be_falsey
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Value is 'Integer', but should be 'Enum' for 'order'. Wrap the value with `__enum`.")
+      end
     end
 
     describe 'directives' do
