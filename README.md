@@ -319,6 +319,34 @@ query = GQLi::DSL.query {
 
 The difference is that by using the native implementation, in case of the condition not being met, the node will be completely not included in the outgoing query.
 
+### Enums
+
+[Enums](https://graphql.org/learn/schema/#enumeration-types) are a list of predefined values that are defined on the type system level.
+Since Ruby doesn't have built-in Enums that can be translated directly into GraphQL Enums, we created the `__enum` helper that you can use within your queries to transform
+your values into an Enum value.
+
+```ruby
+query = GQLi::DSL.query {
+  catCollection(order: __enum('lives_ASC')) {
+    items {
+      name
+    }
+  }
+}
+```
+
+This will render to:
+
+```graphql
+query {
+  catCollection(order: lives_ASC) {
+    items {
+      name
+    }
+  }
+}
+```
+
 ## Yet to be implemented
 
 * Mutation queries
