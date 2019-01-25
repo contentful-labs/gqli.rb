@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+### Added
+* Add Enum support.
 
 ## v0.4.0
 ### Added

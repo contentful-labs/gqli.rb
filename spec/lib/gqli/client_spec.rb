@@ -26,6 +26,24 @@ describe GQLi::Client do
 
   let(:dsl) { GQLi::DSL }
 
+  describe 'query can call the client to execute' do
+    subject { client }
+
+    it '#__execute' do
+      vcr('catCollection') {
+        expect(
+          dsl.query {
+            catCollection {
+              items {
+                name
+              }
+            }
+          }.__execute(subject).data
+        ).not_to be_empty
+      }
+    end
+  end
+
   context 'validations enabled' do
     subject { client }
 

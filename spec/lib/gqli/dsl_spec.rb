@@ -20,6 +20,7 @@ describe GQLi::DSL do
             someField
           }
         GRAPHQL
+        expect(query.to_gql).to eq query.to_s
       end
 
       it 'can create a query with a name' do
@@ -48,6 +49,15 @@ describe GQLi::DSL do
             someFooField
           }
         GRAPHQL
+      end
+    end
+
+    describe '::enum' do
+      it 'can create an enum value' do
+        enum_value = subject.enum('foo')
+
+        expect(enum_value).to be_a GQLi::EnumValue
+        expect(enum_value.to_s).to eq 'foo'
       end
     end
   end
@@ -95,6 +105,15 @@ describe GQLi::DSL do
             someFooField
           }
         GRAPHQL
+      end
+    end
+
+    describe '#enum does the same as ::enum' do
+      it 'can create an enum value' do
+        enum_value = subject.enum('foo')
+
+        expect(enum_value).to be_a GQLi::EnumValue
+        expect(enum_value.to_s).to eq 'foo'
       end
     end
   end
@@ -252,6 +271,26 @@ describe GQLi::DSL do
       expect(query.to_gql).to eq <<~GRAPHQL
         query {
           catCollection(limit: 1) {
+            items {
+              name
+            }
+          }
+        }
+      GRAPHQL
+    end
+
+    it '__enum can create EnumType values' do
+      query = subject.query {
+        catCollection(order: __enum('lives_ASC')) {
+          items {
+            name
+          }
+        }
+      }
+
+      expect(query.to_gql).to eq <<~GRAPHQL
+        query {
+          catCollection(order: lives_ASC) {
             items {
               name
             }

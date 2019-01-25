@@ -115,28 +115,32 @@ module GQLi
     end
 
     def value_type_error(is_type, should_be, for_arg)
-      fail "Value is '#{is_type}', but should be '#{should_be}' for '#{for_arg}'"
+      should_be = should_be.kind == 'ENUM' ? 'Enum' : should_be.name
+      additional_message = '. Wrap the value with `__enum`.' if should_be == 'Enum'
+
+      fail "Value is '#{is_type}', but should be '#{should_be}' for '#{for_arg}'#{additional_message}"
     end
 
     def validate_value_for_type(arg_type, value, for_arg)
       case value
-      when ::String
-        unless arg_type.name == 'String' || arg_type.kind == 'ENUM' || arg_type.name == 'ID'
-          value_type_error('String, Enum or ID', arg_type.name, for_arg)
-        end
-        if arg_type.kind == 'ENUM' && !arg_type.enumValues.map(&:name).include?(value)
+      when EnumValue
+        if arg_type.kind == 'ENUM' && !arg_type.enumValues.map(&:name).include?(value.to_s)
           fail "Invalid value for Enum '#{arg_type.name}' for '#{for_arg}'"
         end
+      when ::String
+        unless arg_type.name == 'String' || arg_type.name == 'ID'
+          value_type_error('String or ID', arg_type, for_arg)
+        end
       when ::Integer
-        value_type_error('Integer', arg_type.name, for_arg) unless arg_type.name == 'Int'
+        value_type_error('Integer', arg_type, for_arg) unless arg_type.name == 'Int'
       when ::Float
-        value_type_error('Float', arg_type.name, for_arg) unless arg_type.name == 'Float'
+        value_type_error('Float', arg_type, for_arg) unless arg_type.name == 'Float'
       when ::Hash
         validate_hash_value(arg_type, value, for_arg)
       when true, false
-        value_type_error('Boolean', arg_type.name, for_arg) unless arg_type.name == 'Boolean'
+        value_type_error('Boolean', arg_type, for_arg) unless arg_type.name == 'Boolean'
       else
-        value_type_error(value.class.name, arg_type.name, for_arg)
+        value_type_error(value.class.name, arg_type, for_arg)
       end
     end
 

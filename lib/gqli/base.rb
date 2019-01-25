@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative './enum_value'
+
 module GQLi
   # Base class for GraphQL type wrappers
   class Base
@@ -26,6 +28,11 @@ module GQLi
     def __node(name, params = {}, &block)
       require_relative './node'
       @__nodes << Node.new(name, params, __depth + 1, &block)
+    end
+
+    # Creates an EnumType value
+    def __enum(value)
+      EnumValue.new(value)
     end
 
     protected
