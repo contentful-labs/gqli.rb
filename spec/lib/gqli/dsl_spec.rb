@@ -37,6 +37,35 @@ describe GQLi::DSL do
       end
     end
 
+    describe '::subscription' do
+      it 'can create a subscription without name' do
+        subscription = subject.subscription {
+          someField
+        }
+
+        expect(subscription).to be_a GQLi::Subscription
+        expect(subscription.to_gql).to eq <<~GRAPHQL
+          subscription {
+            someField
+          }
+        GRAPHQL
+        expect(subscription.to_gql).to eq subscription.to_s
+      end
+
+      it 'can create a subscription with a name' do
+        subscription = subject.subscription('FooBar') {
+          someOtherField
+        }
+
+        expect(subscription).to be_a GQLi::Subscription
+        expect(subscription.to_gql).to eq <<~GRAPHQL
+          subscription FooBar {
+            someOtherField
+          }
+        GRAPHQL
+      end
+    end
+
     describe '::fragment' do
       it 'can create a fragment' do
         fragment = subject.fragment('FooBar', 'Foo') {
@@ -93,6 +122,39 @@ describe GQLi::DSL do
       end
     end
 
+
+    describe '#subscription does the same as ::subscription' do
+
+      subject { MockGQLInterface.new }
+
+      it 'can create a subscription without name' do
+        subscription = subject.subscription {
+          someField
+        }
+
+        expect(subscription).to be_a GQLi::Subscription
+        expect(subscription.to_gql).to eq <<~GRAPHQL
+          subscription {
+            someField
+          }
+        GRAPHQL
+        expect(subscription.to_gql).to eq subscription.to_s
+      end
+
+      it 'can create a subscription with a name' do
+        subscription = subject.subscription('FooBar') {
+          someOtherField
+        }
+
+        expect(subscription).to be_a GQLi::Subscription
+        expect(subscription.to_gql).to eq <<~GRAPHQL
+          subscription FooBar {
+            someOtherField
+          }
+        GRAPHQL
+      end
+    end
+
     describe '#fragment does the same as ::fragment' do
       it 'can create a fragment' do
         fragment = subject.fragment('FooBar', 'Foo') {
@@ -137,8 +199,8 @@ describe GQLi::DSL do
 
     it 'nodes can have directives' do
       query = subject.query {
-        someNode(:@include => {if: true})
-        otherNode(:@skip => {if: false})
+        someNode(:@include => { if: true })
+        otherNode(:@skip => { if: false })
       }
 
       expect(query.to_gql).to eq <<~GRAPHQL
