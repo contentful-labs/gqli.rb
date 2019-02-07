@@ -3,5 +3,5 @@
 # GraphQL Client and DSL library
 module GQLi
   # Gem version
-  VERSION = '0.5.1'
+  VERSION = '0.5.0'
 end
