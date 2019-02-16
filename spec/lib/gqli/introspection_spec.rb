@@ -208,6 +208,31 @@ describe GQLi::Introspection do
       end
     end
 
+    describe 'aliases' do
+      it 'can create a query with an alias' do
+        query = dsl.query {
+          __node('pinned: catCollection', where: {
+            sys: { id_in: 'nyancat' }
+          }) {
+            items {
+              name
+            }
+          }
+          __node('unpinned: catCollection', where: {
+            sys: { id_not_in: 'nyancat' }
+          }, limit: 4) {
+            items {
+              name
+            }
+          }
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_truthy
+        expect(validation.errors).to be_empty
+      end
+    end
+
     describe 'directives' do
       it 'can create a query with a directive and validations should not fail' do
         query = dsl.query {

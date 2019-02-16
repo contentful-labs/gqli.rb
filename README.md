@@ -347,6 +347,37 @@ query {
 }
 ```
 
+### Aliases
+
+There may be times where it is useful to have parts of the query aliased, for example, when querying for `pinned` and `unpinned` articles for a news site.
+
+This can be accomplished as follows:
+
+```ruby
+ArticleFragment = GQLi::DSL.fragment('ArticleFragment', 'ArticleCollection') {
+  items {
+    title
+    description
+    heroImage {
+      url
+    }
+  }
+}
+
+query = GQLi::DSL.query {
+  __node('pinned: articleCollection', where: {
+    sys: { id_in: ['articleID'] }
+  }) {
+    ___ ArticleFragment
+  }
+  __node('unpinned: articleCollection', where: {
+    sys: { id_not_in: ['articleID'] }
+  }) {
+    ___ ArticleFragment
+  }
+}
+```
+
 ## Yet to be implemented
 
 * Mutation queries
