@@ -2,6 +2,7 @@
 
 ## Unreleased
 * Add aliases support.
+* Add default client constructors for Contentful and Github.
 
 ## v0.5.0
 ### Added

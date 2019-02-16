@@ -6,10 +6,7 @@ describe GQLi::Introspection do
     vcr('client') {
       space_id = 'cfexampleapi'
       token = 'b4c0n73n7fu1'
-      GQLi::Client.new(
-        "https://graphql.contentful.com/content/v1/spaces/#{space_id}",
-        headers: { "Authorization" => "Bearer #{token}" }
-      )
+      GQLi::Contentful.create(space_id, token)
     }
   end
 
