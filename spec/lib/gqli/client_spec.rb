@@ -1,30 +1,38 @@
 require 'spec_helper'
 
 describe GQLi::Client do
+  let(:space_id) { 'cfexampleapi' }
+  let(:token) { 'b4c0n73n7fu1' }
+
   let(:client) do
     vcr('client') {
-      space_id = 'cfexampleapi'
-      token = 'b4c0n73n7fu1'
-      GQLi::Client.new(
-        "https://graphql.contentful.com/content/v1/spaces/#{space_id}",
-        headers: { "Authorization" => "Bearer #{token}" }
-      )
+      GQLi::Contentful.create(space_id, token)
     }
   end
 
   let(:client_no_validations) do
     vcr('client') {
-      space_id = 'cfexampleapi'
-      token = 'b4c0n73n7fu1'
-      GQLi::Client.new(
-        "https://graphql.contentful.com/content/v1/spaces/#{space_id}",
-        headers: { "Authorization" => "Bearer #{token}" },
+      GQLi::Contentful.create(
+        space_id,
+        token,
         validate_query: false
       )
     }
   end
 
   let(:dsl) { GQLi::DSL }
+
+  describe 'default clients' do
+    it 'contentful client' do
+      expect(client).to be_a(GQLi::Client)
+    end
+
+    it 'github client' do
+      client = GQLi::Github.create('foobar', validate_query: false)
+
+      expect(client).to be_a(GQLi::Client)
+    end
+  end
 
   describe 'query can call the client to execute' do
     subject { client }

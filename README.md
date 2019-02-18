@@ -29,7 +29,7 @@ gem 'gqli'
 
 ### Creating a GraphQL Client
 
-For the examples throughout this README, we'll be using the Contentful and Github GraphQL APIs.
+For the examples throughout this README, we'll be using the Contentful and Github GraphQL APIs, for which we have factory methods.
 Therefore, here's the initialization code required for both of them:
 
 ```ruby
@@ -38,16 +38,26 @@ require 'gqli'
 # Creating a Contentful GraphQL Client
 SPACE_ID = 'cfexampleapi'
 CF_ACCESS_TOKEN = 'b4c0n73n7fu1'
-CONTENTFUL_GQL = GQLi::Client.new(
-  "https://graphql.contentful.com/content/v1/spaces/#{SPACE_ID}",
-  headers: { "Authorization" => "Bearer #{CF_ACCESS_TOKEN}" }
-)
+CONTENTFUL_GQL = GQLi::Contentful.create(SPACE_ID, CF_ACCESS_TOKEN)
 
 # Creating a Github GraphQL Client
 GITHUB_ACCESS_TOKEN = ENV['GITHUB_TOKEN']
-GITHUB_GQL = GQLi::Client.new(
-  "https://api.github.com/graphql",
-  headers: { "Authorization" => "Bearer #{GITHUB_ACCESS_TOKEN}" }
+GITHUB_GQL = GQLi::Github.create(GITHUB_ACCESS_TOKEN)
+```
+
+*Note*: Please feel free to contribute factories for your favorite GraphQL services.
+
+For creating a custom GraphQL client:
+
+```ruby
+require 'gqli'
+
+# Create a custom client
+GQL_CLIENT = GQLi::Client.new(
+  "https://graphql.yourservice.com",
+  headers: {
+    "Authorization" => "Bearer AUTH_TOKEN"
+  }
 )
 ```
 
@@ -343,6 +353,37 @@ query {
     items {
       name
     }
+  }
+}
+```
+
+### Aliases
+
+There may be times where it is useful to have parts of the query aliased, for example, when querying for `pinned` and `unpinned` articles for a news site.
+
+This can be accomplished as follows:
+
+```ruby
+ArticleFragment = GQLi::DSL.fragment('ArticleFragment', 'ArticleCollection') {
+  items {
+    title
+    description
+    heroImage {
+      url
+    }
+  }
+}
+
+query = GQLi::DSL.query {
+  __node('pinned: articleCollection', where: {
+    sys: { id_in: ['articleID'] }
+  }) {
+    ___ ArticleFragment
+  }
+  __node('unpinned: articleCollection', where: {
+    sys: { id_not_in: ['articleID'] }
+  }) {
+    ___ ArticleFragment
   }
 }
 ```

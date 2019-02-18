@@ -39,6 +39,12 @@ module GQLi
 
     private
 
+    def remove_alias(name)
+      return name unless name.include?(':')
+
+      name.split(':')[1].strip
+    end
+
     def types
       schema.types
     end
@@ -48,13 +54,15 @@ module GQLi
 
       return valid_match_node?(parent_type, node) if node.__name.start_with?('... on')
 
-      node_type = parent_type.fetch('fields', []).find { |f| f.name == node.__name }
-      fail "Node type not found for '#{node.__name}'" if node_type.nil?
+      node_name = remove_alias(node.__name)
+
+      node_type = parent_type.fetch('fields', []).find { |f| f.name == node_name }
+      fail "Node type not found for '#{node_name}'" if node_type.nil?
 
       validate_params(node_type, node)
 
       resolved_node_type = type_for(node_type)
-      fail "Node type not found for '#{node.__name}'" if resolved_node_type.nil?
+      fail "Node type not found for '#{node_name}'" if resolved_node_type.nil?
 
       validate_nesting_node(resolved_node_type, node)
 
@@ -67,7 +75,7 @@ module GQLi
     end
 
     def validate_directives(node)
-      return unless node.__params.size == 1
+      return unless node.__params.size >= 1
       node.__params.first.tap do |k, v|
         break unless k.to_s.start_with?('@')
 

@@ -197,6 +197,40 @@ describe GQLi::DSL do
       GRAPHQL
     end
 
+    it 'nodes can have aliases' do
+      query = subject.query {
+        __node('pinned: catCollection', where: {
+          sys: { id_in: 'nyancat' }
+        }) {
+          items {
+            name
+          }
+        }
+        __node('unpinned: catCollection', where: {
+          sys: { id_not_in: 'nyancat' }
+        }, limit: 4) {
+          items {
+            name
+          }
+        }
+      }
+
+      expect(query.to_gql).to eq <<~GRAPHQL
+        query {
+          pinned: catCollection(where: {sys: {id_in: "nyancat"}}) {
+            items {
+              name
+            }
+          }
+          unpinned: catCollection(where: {sys: {id_not_in: "nyancat"}}, limit: 4) {
+            items {
+              name
+            }
+          }
+        }
+      GRAPHQL
+    end
+
     it 'nodes can have directives' do
       query = subject.query {
         someNode(:@include => { if: true })

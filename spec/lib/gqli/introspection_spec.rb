@@ -6,10 +6,7 @@ describe GQLi::Introspection do
     vcr('client') {
       space_id = 'cfexampleapi'
       token = 'b4c0n73n7fu1'
-      GQLi::Client.new(
-        "https://graphql.contentful.com/content/v1/spaces/#{space_id}",
-        headers: { "Authorization" => "Bearer #{token}" }
-      )
+      GQLi::Contentful.create(space_id, token)
     }
   end
 
@@ -205,6 +202,31 @@ describe GQLi::Introspection do
         expect(validation.valid?).to be_falsey
         expect(validation.errors).not_to be_empty
         expect(validation.errors.map(&:to_s)).to include("Value is 'Integer', but should be 'Enum' for 'order'. Wrap the value with `__enum`.")
+      end
+    end
+
+    describe 'aliases' do
+      it 'can create a query with an alias' do
+        query = dsl.query {
+          __node('pinned: catCollection', where: {
+            sys: { id_in: 'nyancat' }
+          }) {
+            items {
+              name
+            }
+          }
+          __node('unpinned: catCollection', where: {
+            sys: { id_not_in: 'nyancat' }
+          }, limit: 4) {
+            items {
+              name
+            }
+          }
+        }
+
+        validation = subject.validate(query)
+        expect(validation.valid?).to be_truthy
+        expect(validation.errors).to be_empty
       end
     end
 
