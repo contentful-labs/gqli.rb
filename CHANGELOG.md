@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+
+## v0.6.1
 ### Changed
 * Changed Introspection query to no longer use `on...` for directive locations and use `locations` instead.
 
