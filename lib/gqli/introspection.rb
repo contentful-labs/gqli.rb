@@ -69,9 +69,7 @@ module GQLi
           name
           description
           args { ___ InputValue }
-          onOperation
-          onFragment
-          onField
+          locations
         }
       }
     }

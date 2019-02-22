@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+### Changed
+* Changed Introspection query to no longer use `on...` for directive locations and use `locations` instead.
 
 ## v0.6.0
 * Add Subscription DSL support. (by @hschne) [#5](https://github.com/contentful-labs/gqli.rb/pull/5)
