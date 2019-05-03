@@ -37,6 +37,43 @@ describe GQLi::DSL do
       end
     end
 
+    describe '::mutation' do
+      it 'can create a mutation without name' do
+        mutation = subject.mutation {
+          addFoo(name: 'bar') {
+            name
+          }
+        }
+
+        expect(mutation).to be_a GQLi::Mutation
+        expect(mutation.to_gql).to eq <<~GRAPHQL
+          mutation {
+            addFoo(name: "bar") {
+              name
+            }
+          }
+        GRAPHQL
+        expect(mutation.to_gql).to eq mutation.to_s
+      end
+
+      it 'can create a query with a name' do
+        mutation = subject.mutation('AddFoo') {
+          addFoo(name: 'bar') {
+            name
+          }
+        }
+
+        expect(mutation).to be_a GQLi::Mutation
+        expect(mutation.to_gql).to eq <<~GRAPHQL
+          mutation AddFoo {
+            addFoo(name: "bar") {
+              name
+            }
+          }
+        GRAPHQL
+      end
+    end
+
     describe '::subscription' do
       it 'can create a subscription without name' do
         subscription = subject.subscription {
@@ -122,11 +159,44 @@ describe GQLi::DSL do
       end
     end
 
+    describe '#mutation does the same as ::mutation' do
+      it 'can create a mutation without name' do
+        mutation = subject.mutation {
+          addFoo(name: 'bar') {
+            name
+          }
+        }
+
+        expect(mutation).to be_a GQLi::Mutation
+        expect(mutation.to_gql).to eq <<~GRAPHQL
+          mutation {
+            addFoo(name: "bar") {
+              name
+            }
+          }
+        GRAPHQL
+        expect(mutation.to_gql).to eq mutation.to_s
+      end
+
+      it 'can create a query with a name' do
+        mutation = subject.mutation('AddFoo') {
+          addFoo(name: 'bar') {
+            name
+          }
+        }
+
+        expect(mutation).to be_a GQLi::Mutation
+        expect(mutation.to_gql).to eq <<~GRAPHQL
+          mutation AddFoo {
+            addFoo(name: "bar") {
+              name
+            }
+          }
+        GRAPHQL
+      end
+    end
 
     describe '#subscription does the same as ::subscription' do
-
-      subject { MockGQLInterface.new }
-
       it 'can create a subscription without name' do
         subscription = subject.subscription {
           someField

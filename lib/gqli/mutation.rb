@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module GQLi
-  # Subscription node
-  class Subscription < Base
+  # Mutation node
+  class Mutation < Base
     # Serializes to a GraphQL string
     def to_gql
       result = <<~GQL
-        subscription #{__name ? __name + ' ' : ''}{
+        mutation #{__name ? __name + ' ' : ''}{
         #{__nodes.map(&:to_gql).join("\n")}
         }
       GQL

@@ -388,11 +388,6 @@ query = GQLi::DSL.query {
 }
 ```
 
-## Yet to be implemented
-
-* Mutation queries
-* Subscription queries
-
 ## Get involved
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?maxAge=31557600)](http://makeapullrequest.com)
