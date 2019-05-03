@@ -3,11 +3,11 @@
 module GQLi
   # Validations
   class Validation
-    attr_reader :schema, :query, :errors
+    attr_reader :schema, :root, :errors
 
-    def initialize(schema, query)
+    def initialize(schema, root)
       @schema = schema
-      @query = query
+      @root = root
       @errors = []
 
       validate
@@ -21,23 +21,26 @@ module GQLi
     protected
 
     def validate
-      fail 'Not a Query object' unless query.is_a?(Query)
+      @errors = []
 
-      query_type = types.find { |t| t.name.casecmp('query').zero? }
-      query.__nodes.each do |node|
+      type_name = root.class.name.split('::').last
+      validate_type(type_name)
+    end
+
+    private
+
+    def validate_type(type)
+      root_type = types.find { |t| t.name.casecmp(type).zero? }
+      root.__nodes.each do |node|
         begin
-          validate_node(query_type, node)
+          validate_node(root_type, node)
         rescue StandardError => e
           errors << e
         end
       end
 
-      true
-    rescue StandardError => e
-      errors << e
+      valid?
     end
-
-    private
 
     def remove_alias(name)
       return name unless name.include?(':')

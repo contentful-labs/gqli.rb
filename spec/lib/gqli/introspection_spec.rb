@@ -322,5 +322,59 @@ describe GQLi::Introspection do
         expect(validation.errors.map(&:to_s)).to include("Invalid argument 'else' for directive '@include'")
       end
     end
+
+    describe 'mutations' do
+      let(:client) {
+        vcr('mutation_client') {
+          GQLi::Github.create(ENV.fetch('GITHUB_READ_ONLY', '<ACCESS_TOKEN>'))
+        }
+      }
+
+      it 'fails for unknown mutation' do
+        mutation = dsl.mutation {
+          foo(bar: 'baz') {
+            bar
+          }
+        }
+
+        validation = subject.validate(mutation)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Node type not found for 'foo'")
+      end
+
+      it 'fails for unknown arguments' do
+        mutation = dsl.mutation {
+          addComment(foo: 'bar') {
+            subject {
+              id
+            }
+          }
+        }
+
+        validation = subject.validate(mutation)
+        expect(validation.valid?).to be_falsey
+        expect(validation.errors).not_to be_empty
+        expect(validation.errors.map(&:to_s)).to include("Invalid argument 'foo'")
+      end
+
+      it 'true for valid mutation' do
+        mutation = dsl.mutation {
+          addComment(input: {
+            subjectId: 'some subject id',
+            body: 'some subject',
+            clientMutationId: 'some identifier'
+          }) {
+            subject {
+              id
+            }
+          }
+        }
+
+        validation = subject.validate(mutation)
+        expect(validation.valid?).to be_truthy
+        expect(validation.errors).to be_empty
+      end
+    end
   end
 end

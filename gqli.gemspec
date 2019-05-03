@@ -19,7 +19,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'hashie', '~> 3.0'
   gem.add_dependency 'multi_json', '~> 1'
 
-  gem.add_development_dependency 'bundler', '~> 1.5'
   gem.add_development_dependency 'rake', '< 11.0'
   gem.add_development_dependency 'rubygems-tasks', '~> 0.2'
 

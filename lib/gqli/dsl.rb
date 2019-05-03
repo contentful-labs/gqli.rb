@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative './query'
+require_relative './mutation'
 require_relative './subscription'
 require_relative './fragment'
 require_relative './enum_value'
@@ -20,6 +21,13 @@ module GQLi
     # Can be used at a class level
     def self.subscription(name = nil, &block)
       Subscription.new(name, &block)
+    end
+
+    # Creates a Mutation object
+    #
+    # Can be used at a class level
+    def self.mutation(name = nil, &block)
+      Mutation.new(name, &block)
     end
 
     # Creates a Fragment object
@@ -43,9 +51,16 @@ module GQLi
       Query.new(name, &block)
     end
 
+    # Creates a Mutation object
+    #
+    # Can be used at a instance level
+    def mutation(name = nil, &block)
+      Mutation.new(name, &block)
+    end
+
     # Creates a Subscription object
     #
-    # Can be used at a class level
+    # Can be used at a instance level
     def subscription(name = nil, &block)
       Subscription.new(name, &block)
     end
