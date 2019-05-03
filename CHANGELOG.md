@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+
+## v1.0.0
 ### Added
 * Added support for Mutations.
 * Added validations for Mutations and Subscriptions.
