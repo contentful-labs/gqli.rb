@@ -20,7 +20,7 @@ module GQLi
       @options[:read_timeout] ||= 60
       @options[:write_timeout] ||= 60
       @options[:connect_timeout] ||= 60
-      
+
       @schema = Introspection.new(self) if validate_query
     end
 
@@ -39,11 +39,7 @@ module GQLi
     # Ignores validations
     def execute!(query)
       http_response = HTTP.headers(request_headers)
-                          .timeout(
-                            :write => options[:write_timeout],
-                            :connect => options[:connect_timeout],
-                            :read => options[:read_timeout]
-                          )
+                          .timeout(timeout_options)
                           .post(@url, params: @params, json: { query: query.to_gql })
 
       fail "Error: #{http_response.reason}\nBody: #{http_response.body}" if http_response.status >= 300
@@ -76,6 +72,14 @@ module GQLi
         accept: 'application/json',
         user_agent: "gqli.rb/#{VERSION}; http.rb/#{HTTP::VERSION}"
       }.merge(@headers)
+    end
+
+    def timeout_options
+    {
+      write: options[:write_timeout],
+      connect: options[:connect_timeout],
+      read: options[:read_timeout]
+    }
     end
   end
 end
