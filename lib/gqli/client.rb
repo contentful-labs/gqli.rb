@@ -75,11 +75,11 @@ module GQLi
     end
 
     def timeout_options
-    {
-      write: options[:write_timeout],
-      connect: options[:connect_timeout],
-      read: options[:read_timeout]
-    }
+      {
+        write: options[:write_timeout],
+        connect: options[:connect_timeout],
+        read: options[:read_timeout]
+      }
     end
   end
 end
