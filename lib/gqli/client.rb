@@ -38,9 +38,7 @@ module GQLi
     # Executres a query
     # Ignores validations
     def execute!(query)
-      http_response = HTTP.headers(request_headers)
-                          .timeout(timeout_options)
-                          .post(@url, params: @params, json: { query: query.to_gql })
+      http_response = request.post(@url, params: @params, json: { query: query.to_gql })
 
       fail "Error: #{http_response.reason}\nBody: #{http_response.body}" if http_response.status >= 300
 
@@ -54,6 +52,10 @@ module GQLi
       return true unless validate_query
 
       schema.valid?(query)
+    end
+
+    def request
+      HTTP.headers(request_headers).timeout(timeout_options)
     end
 
     protected

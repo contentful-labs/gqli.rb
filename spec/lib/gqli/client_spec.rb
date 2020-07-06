@@ -3,6 +3,8 @@ require 'spec_helper'
 describe GQLi::Client do
   let(:space_id) { 'cfexampleapi' }
   let(:token) { 'b4c0n73n7fu1' }
+  let(:default_timeout) { 60 }
+  let(:timeout) { 10 }
 
   let(:client) do
     vcr('client') {
@@ -16,6 +18,21 @@ describe GQLi::Client do
         space_id,
         token,
         validate_query: false
+      )
+    }
+  end
+
+  let(:client_with_timeout) do
+    vcr('client') {
+      GQLi::Contentful.create(
+        space_id,
+        token,
+        validate_query: false,
+        options: {
+          connect_timeout: timeout,
+          read_timeout: timeout,
+          write_timeout: timeout
+        }
       )
     }
   end
@@ -116,6 +133,42 @@ describe GQLi::Client do
           'Body: {"errors":[{"message":"Cannot query field \"foobar\" on type \"Query\".","locations":[{"line":2,"column":3}]}]}'
         ].join("\n"))
       }
+    end
+  end
+
+  context 'without timeout options' do
+    subject { client }
+
+    it 'upon instantiation sets default timeout value' do
+      expect(subject.options[:read_timeout]).to eq(default_timeout)
+      expect(subject.options[:connect_timeout]).to eq(default_timeout)
+      expect(subject.options[:write_timeout]).to eq(default_timeout)
+    end
+
+    it 'when executing a request sets default timeout value' do
+      expect(subject.request.default_options.timeout_options[:read_timeout]).to eq(default_timeout)
+      expect(subject.request.default_options.timeout_options[:connect_timeout]).to eq(default_timeout)
+      expect(subject.request.default_options.timeout_options[:write_timeout]).to eq(default_timeout)
+    end
+  end
+
+  context 'with timeout options' do
+    subject { client_with_timeout }
+
+    it 'contentful client' do
+      expect(subject).to be_a(GQLi::Client)
+    end
+
+    it 'upon instantiation sets provided timeout value' do
+      expect(subject.options[:read_timeout]).to eq(timeout)
+      expect(subject.options[:connect_timeout]).to eq(timeout)
+      expect(subject.options[:write_timeout]).to eq(timeout)
+    end
+
+    it 'when executing a request sets provided timeout value' do
+      expect(subject.request.default_options.timeout_options[:read_timeout]).to eq(timeout)
+      expect(subject.request.default_options.timeout_options[:connect_timeout]).to eq(timeout)
+      expect(subject.request.default_options.timeout_options[:write_timeout]).to eq(timeout)
     end
   end
 end
