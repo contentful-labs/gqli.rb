@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe GQLi::Response do
-  let(:errors) { [{"message" => "this is an error"}] }
+  let(:errors) { nil }
   let(:data) { {"testkey" => "test val"} }
   let(:query) { double(:query) }
   subject { described_class.new(data, errors, query) }
@@ -21,6 +21,8 @@ describe GQLi::Response do
 
   describe "#errors" do
     context "array errors" do
+      let(:errors) { [{"message" => "this is an error"}] }
+
       it "converts errors to correct Hashie instances" do
         expect(subject.errors).to be_kind_of(Array)
         expect(subject.errors.length).to eq(1)
@@ -37,6 +39,13 @@ describe GQLi::Response do
         expect(subject.errors.message).to eq(errors["message"])
       end
     end
+
+    context "nil errors" do
+      it "does not raise error and returns nil" do
+        expect(subject.errors).to be(nil)
+      end
+    end
+
   end
 
 end
