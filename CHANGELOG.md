@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v1.1.0
+* Added support for timeout management. [#11](https://github.com/contentful-labs/gqli.rb/pull/11)
+* Added support for error response handling. [#13](https://github.com/contentful-labs/gqli.rb/pull/13)
+
 ## v1.0.0
 ### Added
 * Added support for Mutations.
