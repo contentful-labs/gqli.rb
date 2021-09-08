@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   gem.add_dependency 'http', '> 0.8', '< 3.0'
-  gem.add_dependency 'hashie', '~> 3.0'
+  gem.add_dependency 'hashie', '> 3.0'
   gem.add_dependency 'multi_json', '~> 1'
 
   gem.add_development_dependency 'rake', '< 11.0'
