@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Unreleased
+* Relax http dependency (support version < 6).
 
 ## v1.1.0
 * Added support for timeout management. [#11](https://github.com/contentful-labs/gqli.rb/pull/11)
