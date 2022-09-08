@@ -56,6 +56,8 @@ module GQLi
       schema.valid?(query)
     end
 
+    # Executes the actual request
+    # @private
     def request
       HTTP.headers(request_headers).timeout(timeout_options)
     end

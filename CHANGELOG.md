@@ -1,10 +1,13 @@
 # CHANGELOG
 
 ## Unreleased
+### Added
+* Client constructor for GitLab. (@lukes) [#17](https://github.com/contentful-labs/gqli.rb/pull/17)
 
 ## v1.2.0
 ### Added
-* Client constructor for GitLab. (@lukes)
+* Relax http.rb dependency (support version < 6). [#19](https://github.com/contentful-labs/gqli.rb/pull/19)
+* Bump hashie dependency. [#18](https://github.com/contentful-labs/gqli.rb/pull/18)
 
 ## v1.1.0
 * Added support for timeout management. [#11](https://github.com/contentful-labs/gqli.rb/pull/11)

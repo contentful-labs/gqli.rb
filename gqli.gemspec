@@ -15,11 +15,11 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^spec/})
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'http', '> 0.8', '< 3.0'
-  gem.add_dependency 'hashie', '~> 3.0'
+  gem.add_dependency 'hashie', '> 3.0'
+  gem.add_dependency 'http', '> 0.8', '< 6.0'
   gem.add_dependency 'multi_json', '~> 1'
 
-  gem.add_development_dependency 'rake', '< 11.0'
+  gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rubygems-tasks', '~> 0.2'
 
   gem.add_development_dependency 'guard'
@@ -29,8 +29,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rubocop', '~> 0.49.1'
   gem.add_development_dependency 'rspec', '~> 3'
   gem.add_development_dependency 'rr'
-  gem.add_development_dependency 'vcr'
+  gem.add_development_dependency 'vcr', '~> 4.0'
   gem.add_development_dependency 'simplecov'
-  gem.add_development_dependency 'webmock', '~> 1', '>= 1.17.3'
+  gem.add_development_dependency 'webmock', '~> 3.5'
   gem.add_development_dependency 'tins', '~> 1.6.0'
 end
