@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
+### Added
+* Client constructor for GitLab. (@lukes) [#17](https://github.com/contentful-labs/gqli.rb/pull/17)
 
 ## v1.2.0
 * Relax http.rb dependency (support version < 6). [#19](https://github.com/contentful-labs/gqli.rb/pull/19)

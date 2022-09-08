@@ -49,6 +49,32 @@ describe GQLi::Client do
 
       expect(client).to be_a(GQLi::Client)
     end
+
+    describe 'gitlab client' do
+      it 'can build a client without Authorization headers' do
+        client = GQLi::GitLab.create(validate_query: false)
+
+        expect(client).to be_a(GQLi::Client)
+        expect(client.headers).to be_empty
+        expect(client.url).to eq('https://gitlab.com/api/graphql')
+      end
+
+      it 'can build a client with Authorization headers' do
+        client = GQLi::GitLab.create('foobar', validate_query: false)
+
+        expect(client).to be_a(GQLi::Client)
+        expect(client.headers).to eq({'Authorization' => 'Bearer foobar'})
+        expect(client.url).to eq('https://gitlab.com/api/graphql')
+      end
+
+      it 'can build a client to a self-managed GitLab instance' do
+        client = GQLi::GitLab.create(api: 'https://foo.com', validate_query: false)
+
+        expect(client).to be_a(GQLi::Client)
+        expect(client.headers).to be_empty
+        expect(client.url).to eq('https://foo.com')
+      end
+    end
   end
 
   describe 'query can call the client to execute' do
